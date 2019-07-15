@@ -332,11 +332,105 @@ TODO： 进一步优化
 ## Problem 5
 
 ### Problem Description
+> Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+> Example 1:
+> > Input: "babad"
+> > Output: "bab"
+> > Note: "aba" is also a valid answer.
+> Example 2:
+> > Input: "cbbd"
+> > Output: "bb"
 
 ### Solution
+Other's Code
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        #预处理
+        s1='#'+'#'.join(s)+'#'
+        RL=[0]*len(s1)
+        MaxRight=0
+        pos=0
+        MaxLen=0
+        maxPos=0
+        for i in range(len(s1)):
+            if i<MaxRight:
+                RL[i]=min(RL[2*pos-i], MaxRight-i)
+            else:
+                RL[i]=1
+            #尝试扩展，注意处理边界
+            while i-RL[i]>=0 and i+RL[i]<len(s1) and s1[i-RL[i]]==s1[i+RL[i]]:
+                RL[i]+=1
+            #更新MaxRight,pos
+            if RL[i]+i-1>MaxRight:
+                MaxRight=RL[i]+i-1
+                pos=i
+            #更新最长回文串的长度
+            if RL[i]>MaxLen:
+                MaxLen = RL[i]
+                maxPos = i
 
+        MaxLen = MaxLen - 1
+        return s[int((maxPos-MaxLen)/2):int((maxPos+MaxLen)/2)]
+```
+
+My Code
+```python
+#
+# @lc app=leetcode id=5 lang=python3
+#
+# [5] Longest Palindromic Substring
+#
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        #preprocessing
+        s1='#'+'#'.join(s)+'#'
+        radius=[1]*len(s1)
+        rightBound,centerPosition,maxLength,maxPosition=1,0,1,0
+
+        for i in range(len(s1)):
+            if(i+maxLength>len(s1)):break 
+            iMirrored = 2*centerPosition - i
+            if(radius[iMirrored]>=rightBound-i):
+                radius[i] = rightBound-i
+                while(i-radius[i]>=0 and i+radius[i]< len(s1) and s1[i+radius[i]] == s1[i-radius[i]]):
+                    radius[i] += 1
+                centerPosition = i
+                rightBound = i + radius[i]
+            else: radius[i]=radius[iMirrored]
+            
+            if(radius[i]>maxLength):
+                maxLength = radius[i]
+                maxPosition = i
+        
+        maxLength -= 1
+        return s[int((maxPosition-maxLength)/2):int((maxPosition+maxLength)/2)]
+
+```
 ### Tips
 
+Manacher 算法
+仅适用于奇回文问题('aba') 
+1. 改造原字符串以适应偶回文（加入原字符串中不存在的字符如'#'）记为 S[i]
+2. 辅助数组 P, P[i]表示以S[i]为中心的最长回文半径（包含中心字符）, P[i]-1 对应原字符串中最长回文长度
+3. 问题：已知 P[0:i] 求 P[i]，设置辅助变量 mx: 目前遍历到的回文子串能到达的最右端的位置；id: mx 对应的回文串中心的位置 即mx=P[id]+id (S[mx]不在当前回文子串中）。根据 i 的位置，可以分为两种情况：
+   1. i=mx 没有对称性可以利用，从中间向两边逐步扩展，更新 mx 和 id
+   2. id<i<mx 可以利用 i_mirror = 2*id - i 和 P[i_mirror] 的值，又分为两种情况。
+      -  P[i_mirror] 较小，P[[i_mirror]+i<=mx: P[i]=P[i_mirror] 
+      -  P[i_mirror] 较大，P[[i_mirror]+i>mx：只能保证 P[i]>= mx-i 从mx-i 开始向两边扩展，更新 mx 和 id
+    Wait! 最后一种情况和第一种可以合并为 P[[i_mirror]+i>mx 的情况
+4. 时间复杂度$O(n)$ 空间复杂度 $O(n)$
+  
+> 一个问题：两个不同位置的回文串到达相同的 mx,选取较大的 id 还是较小的 id?
+猜测：无所谓？
+> 空间的改进：仅保留 id 和 mx 对应的回文子串内的P数组？
+如果在这种情况下，上一个问题，自然是选取越近的 id 越好
+
+References:
+1. [Manacher's algorithm: 最长回文子串算法 - eGust - 博客园](https://www.cnblogs.com/egust/p/4580299.html)
+2. [最长回文子串问题—Manacher算法 - code666 - 博客园](https://www.cnblogs.com/code666/p/7298300.html)
+3. [Manacher's Algorithm 马拉车算法 - Grandyang - 博客园](https://www.cnblogs.com/grandyang/p/4475985.html)
+   
 
 ## Problem 6
 

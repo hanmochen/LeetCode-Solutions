@@ -5,38 +5,27 @@
 #
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        #预处理
+        #preprocessing
         s1='#'+'#'.join(s)+'#'
-        RL=[0]*len(s1)
-        MaxRight=0
-        pos=0
-        MaxLen=0
-        maxPos=0
-        for i in range(len(s1)):
-            if i<MaxRight:
-                RL[i]=min(RL[2*pos-i], MaxRight-i)
-            else:
-                RL[i]=1
-            #尝试扩展，注意处理边界
-            while i-RL[i]>=0 and i+RL[i]<len(s1) and s1[i-RL[i]]==s1[i+RL[i]]:
-                RL[i]+=1
-            #更新MaxRight,pos
-            if RL[i]+i-1>MaxRight:
-                MaxRight=RL[i]+i-1
-                pos=i
-            #更新最长回文串的长度
-            if RL[i]>MaxLen:
-                MaxLen = RL[i]
-                maxPos = i
+        radius=[1]*len(s1)
+        rightBound,centerPosition,maxLength,maxPosition=1,0,1,0
 
-        MaxLen = MaxLen - 1
-        return s[int((maxPos-MaxLen)/2):int((maxPos+MaxLen)/2)]
-        # if maxPos%2 == 0:
-        #     pos = int(maxPos/2)
-        #     half = int(MaxLen/2)
-        #     return s[pos-half:pos+half]
-        # else:
-        #     pos = int(maxPos/2)
-        #     half = int(MaxLen/2)
-        #     return s[pos-half:pos+half+1]
+        for i in range(len(s1)):
+            if(i+maxLength>len(s1)):break
+            iMirrored = 2*centerPosition - i
+            if(radius[iMirrored]>=rightBound-i):
+                radius[i] = rightBound-i
+                while(i-radius[i]>=0 and i+radius[i]< len(s1) and s1[i+radius[i]] == s1[i-radius[i]]):
+                    radius[i] += 1
+                centerPosition = i
+                rightBound = i + radius[i]
+            else: radius[i]=radius[iMirrored]
+            
+            if(radius[i]>maxLength):
+                maxLength = radius[i]
+                maxPosition = i
+        
+        maxLength -= 1
+        return s[int((maxPosition-maxLength)/2):int((maxPosition+maxLength)/2)]
+
 
