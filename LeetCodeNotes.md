@@ -51,10 +51,11 @@ class Solution:
 
 ### Tips
 
-- enumerate 的使用
-- dict 的使用
+- `enumerate` 的使用
+- `dict` 的使用
 
-## Problem 2 
+## Problem 2
+
 ### Problem Description
 > You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
 > You may assume the two numbers do not contain any leading zero, except the number 0 itself.
@@ -183,8 +184,11 @@ class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         if(len(s) <= 1): 
             return len(s)
+
         pos, maxLen = -1, 0
+        
         dic = {}
+
         for ind,char in enumerate(s):
             if (char in dic) :
                 if (pos <= dic[char]):
@@ -194,7 +198,17 @@ class Solution:
         return maxLen
 ```
 ### Tips
-- Optimized Sliding Window 
+**Optimized Sliding Window** 
+从前往后遍历，假定已知目前最大长度，和目前活动的滑动窗口，对于下一个字符，有两种情况：
+- 未出现过： 加入滑动窗口中，比较窗口大小和最大长度，更新字典和最大长度
+- 已经出现过：
+  - 若上一次出现的位置在滑动窗口内，窗口左边界设为上一次出现的位置，当前位置加入滑动窗口，更新字典和最大长度
+  - 若上一次出现的位置不在窗口中，当前位置加入滑动窗口，更新字典和最大长度
+
+一个误区：
+**滑动窗口是目前正在活动（active）的窗口，而不是目前最大长度的窗口。**
+
+时间复杂度：$O(n)$
 
 ## Problem 4
 
@@ -312,6 +326,8 @@ class Solution:
 特殊情况的处理：
 - $ m>n $  可能出现 $j$ 为负数的情况，此时将 A,B 互换即可，同时也可以降低时间复杂度为$O(\log(\min(m,n)))$
 - $i=0,m, j = 0,n$ 的情况，规定$A[-1]=B[-1] -\infty,A[m]=B[n]= \infty$ 即可
+
+TODO： 进一步优化
 
 ## Problem 5
 
