@@ -435,10 +435,88 @@ References:
 ## Problem 6
 
 ### Problem Description
+> The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+>> P   A   H   N
+>> A P L S I I G
+>> Y   I   R
+> And then read line by line: "PAHNAPLSIIGYIR"
+> Write the code that will take a string and make this conversion given a number of rows:
+> string convert(string s, int numRows);
+>> Example 1:
+>> Input: s = "PAYPALISHIRING", numRows = 3
+>> Output: "PAHNAPLSIIGYIR"
+> 
+>> Example 2:
+>> Input: s = "PAYPALISHIRING", numRows = 4
+>> Output: "PINALSIGYAHRPI"
+>> Explanation:
+>> P     I    N
+>> A   L S  I G
+>> Y A   H R
+>> P     I
 
 ### Solution
+```python
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if(numRows==1): return s
+        period = 2*(numRows - 1)
+        length = len(s)-1
+        result = ""
+        rounds = int (length/period)
+        remains = length % period 
+
+        for i in range(rounds+1):
+            result += s[i*period]
+
+        if(remains<numRows-1):
+            for j in range(1,remains+1):
+                for i in range(rounds):
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
+
+                result += s[j+rounds*period]
+            
+            for j in range(remains+1,numRows-1):
+                for i in range(rounds):
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
+                    
+            for i in range(rounds):
+                result += s[numRows-1+i*period]
+
+        else:
+            for j in range(1,period-remains):
+                for i in range(rounds):
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
+
+                result += s[j+rounds*period]
+            
+            for j in range(period-remains,numRows-1):
+                for i in range(rounds):
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]  
+
+                result += s[j+rounds*period]
+                result += s[rounds*period+period-j]
+
+            for i in range(rounds):
+                result += s[numRows-1+i*period]
+                
+            result += s[numRows-1+rounds*period]
+        return result
+
+```
 
 ### Tips
+
+- 以 2n-2 为周期
+- 最后一个周期单独处理
+  - 余数大于 n-1
+  - 余数小于 n-1
+- 最后一行单独处理
+- 另一个思路：用特殊符号如`#`补齐到完整的周期 然后从结果中删去
 
 
 ## Problem 7

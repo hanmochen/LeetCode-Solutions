@@ -6,49 +6,49 @@
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
         if(numRows==1): return s
-        n = 2*(numRows - 1)
-        l = len(s)-1
-        res = ""
-        rounds = int (l/n)
-        remained = l % n 
+        period = 2*(numRows - 1)
+        length = len(s)-1
+        result = ""
+        rounds = int (length/period)
+        remains = length % period 
 
         for i in range(rounds+1):
-            res += s[i*n]
+            result += s[i*period]
 
-        if(remained<numRows-1):
-            for j in range(1,remained+1):
+        if(remains<numRows-1):
+            for j in range(1,remains+1):
                 for i in range(rounds):
-                    res += s[j+i*n]
-                    res += s[(i+1)*n-j]
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
 
-                res += s[j+rounds*n]
+                result += s[j+rounds*period]
             
-            for j in range(remained+1,numRows-1):
+            for j in range(remains+1,numRows-1):
                 for i in range(rounds):
-                    res += s[j+i*n]
-                    res += s[(i+1)*n-j]
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
                     
             for i in range(rounds):
-                res += s[numRows-1+i*n]
+                result += s[numRows-1+i*period]
 
         else:
-            for j in range(1,n-remained):
+            for j in range(1,period-remains):
                 for i in range(rounds):
-                    res += s[j+i*n]
-                    res += s[(i+1)*n-j]
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]
 
-                res += s[j+rounds*n]
+                result += s[j+rounds*period]
             
-            for j in range(n-remained,numRows-1):
+            for j in range(period-remains,numRows-1):
                 for i in range(rounds):
-                    res += s[j+i*n]
-                    res += s[(i+1)*n-j]  
+                    result += s[j+i*period]
+                    result += s[(i+1)*period-j]  
 
-                res += s[j+rounds*n]
-                res += s[rounds*n+n-j]
+                result += s[j+rounds*period]
+                result += s[rounds*period+period-j]
 
             for i in range(rounds):
-                res += s[numRows-1+i*n]
+                result += s[numRows-1+i*period]
                 
-            res += s[numRows-1+rounds*n]
-        return res
+            result += s[numRows-1+rounds*period]
+        return result
