@@ -566,23 +566,94 @@ class Solution:
 
 ### Tips
 
-
+- Boring
 
 ## Problem 8
 
 ### Problem Description
 
+> Implement atoi which converts a string to an integer.
+
 ### Solution
+```python
+class Solution:
+    def myAtoi(self, str: str) -> int:
+        l = len(str)
+        INT_MAX = 2**31-1
+        INT_MIN = - 2**31
+        if(l == 0): return 0
+        
+        pos = 0 
+        flag = True
+        res = 0
+        while(pos < l and str[pos]==" "): 
+            pos += 1
+        
+        if(pos>=l): return 0
+
+        if(not( str[pos]=="+" or str[pos] == "-" or (str[pos]>= "0" and str[pos] <= "9"))): return 0
+        
+        if( str[pos]=="+" or str[pos] == "-"): 
+            flag = (str[pos]== "+")
+            pos += 1
+        
+
+        while (pos < l and str[pos]>="0" and str[pos] <= "9" ):
+            if(res>INT_MAX or res < INT_MIN):
+                if flag: return INT_MAX
+                else: return INT_MIN
+            
+            res *= 10
+            res += int(str[pos]) - int("0")
+            pos += 1
+
+        if(res>INT_MAX or res < INT_MIN):
+                if flag: return INT_MAX
+                else: return INT_MIN
+        
+        if flag: return res
+        else: return -res
+```
 
 ### Tips
+
+> It's not algorithm,it's a if-else practice :(
+
 
 ## Problem 9
 
 ### Problem Description
+> Determine whether an integer is a palindrome. An integer is a palindrome when it reads the same backward as forward.
+
 
 ### Solution
 
+```python
+from math import log10 as log
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if(x<0): return False
+        if(x==0): return True
+        numOfDigits = int(log(x))
+        rangeTen = 10**numOfDigits
+        while(x>0):            
+            if(x%10 !=  int(x/rangeTen)): return False
+            x = int((x%rangeTen) /10)
+            rangeTen /= 100
+        
+        return True
+```
+
+```python
+def isPalindrome(self, x: int) -> bool:
+        s = str(x)
+        return s == s[::-1]
+```
+
 ### Tips
+
+- 刚开始考虑类似迭代的思路，每次去除最高位和最低位，但对于 10101 类型出错
+- 需要引入 range /= 100，同时也不需要每次取 log
 
 
 ## Problem X
