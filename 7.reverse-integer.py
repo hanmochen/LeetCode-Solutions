@@ -6,6 +6,8 @@
 class Solution:
     def reverse(self, x: int) -> int:
         flag = (x>=0)
+        INT32_MAX = 2**31-1
+        INT32_MIN = - 2**31
         x = abs(x)
         res = 0
         if x==0 : return res
@@ -16,7 +18,7 @@ class Solution:
             x = int(x/10)
 
         if not flag: res = -res
-        if res >= 2**31-1 or res <= - 2**31: res = 0
+        if res >= INT32_MAX or res <= INT32_MIN: res = 0
         
         return res
 

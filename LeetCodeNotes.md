@@ -439,9 +439,11 @@ References:
 >> P   A   H   N
 >> A P L S I I G
 >> Y   I   R
+> 
 > And then read line by line: "PAHNAPLSIIGYIR"
 > Write the code that will take a string and make this conversion given a number of rows:
 > string convert(string s, int numRows);
+> 
 >> Example 1:
 >> Input: s = "PAYPALISHIRING", numRows = 3
 >> Output: "PAHNAPLSIIGYIR"
@@ -522,10 +524,49 @@ class Solution:
 ## Problem 7
 
 ### Problem Description
+> Given a 32-bit signed integer, reverse digits of an integer.
+> 
+>> Example 1:
+>> Input: 123
+>> Output: 321
+> 
+>> Example 2:
+>> Input: -123
+>> Output: -321
+> 
+>> Example 3:
+>> Input: 120
+>> Output: 21
+> 
+> Note:
+> Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: $[−2^{31},  2^{31} − 1]$. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.
+
 
 ### Solution
+```python
+class Solution:
+    def reverse(self, x: int) -> int:
+        flag = (x>=0)
+        INT32_MAX = 2**31-1
+        INT32_MIN = - 2**31
+        x = abs(x)
+        res = 0
+        if x==0 : return res
+        while(x!=0):
+            res *= 10
+            tmp = x %10
+            res += tmp
+            x = int(x/10)
+
+        if not flag: res = -res
+        if res >= INT32_MAX or res <= INT32_MIN: res = 0
+        
+        return res
+```
 
 ### Tips
+
+
 
 ## Problem 8
 
