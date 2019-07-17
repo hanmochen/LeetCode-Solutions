@@ -750,6 +750,12 @@ class Solution:
 
 
 
+**A stupid Bug**
+
+`[[1] * m for _ in range(n)]`跟 `n*[m*[1]]` 的区别
+
+> `n*[m*[1]]` 中先创建了一个 $m\times 1$ 的数组，然后把这个数组的引用拷贝了 n 份，因此在修改任一元素时都会改动 $n$ 份。
+
 **References**
 
 1. [Regular Expression Matching - LeetCode Articles](https://leetcode.com/articles/regular-expression-matching/)
