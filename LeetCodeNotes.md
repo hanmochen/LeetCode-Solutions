@@ -430,7 +430,7 @@ References:
 1. [Manacher's algorithm: 最长回文子串算法 - eGust - 博客园](https://www.cnblogs.com/egust/p/4580299.html)
 2. [最长回文子串问题—Manacher算法 - code666 - 博客园](https://www.cnblogs.com/code666/p/7298300.html)
 3. [Manacher's Algorithm 马拉车算法 - Grandyang - 博客园](https://www.cnblogs.com/grandyang/p/4475985.html)
-   
+  
 
 ## Problem 6
 
@@ -655,6 +655,106 @@ def isPalindrome(self, x: int) -> bool:
 - 刚开始考虑类似迭代的思路，每次去除最高位和最低位，但对于 10101 类型出错
 - 需要引入 range /= 100，同时也不需要每次取 log
 
+## Problem 10
+
+### Problem Description
+Given an input string (`s`) and a pattern (`p`), implement regular expression matching with support for `'.'` and `'*'`.
+
+```
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+```
+
+The matching should cover the **entire** input string (not partial).
+
+**Note:**
+
+- `s` could be empty and contains only lowercase letters `a-z`.
+- `p` could be empty and contains only lowercase letters `a-z`, and characters like `.` or `*`.
+
+### Solution
+
+
+
+```python
+#
+# @lc app=leetcode id=10 lang=python3
+#
+# [10] Regular Expression Matching
+#
+class Solution:
+    def isMatch(self, text: str, pattern: str) -> bool:
+        
+        lengthOfText,lengthOfPattern = len(text),len(pattern)
+        dp = [[False]* (lengthOfPattern + 1) for _ in range(lengthOfText+1)] 
+        dp[-1][-1] = True #End of Match
+
+        for i in range(lengthOfText,-1,-1):
+            for j in range(lengthOfPattern-1,-1,-1):
+                if(j == lengthOfPattern-1):
+                    dp[i][j] = ( (i == lengthOfText-1) and (self.isMatchOfSingleCharacter(text[i],pattern[j])) )
+                else:
+                    if(pattern[j+1] == '*'):
+                        if(i == lengthOfText ): # End of Text
+                            dp[i][j] = dp[i][j+2]
+                        else:
+                            dp[i][j] = (dp[i][j+2] or (self.isMatchOfSingleCharacter(text[i],pattern[j]) and dp[i+1][j]))
+                    else:
+                        if(i == lengthOfText): dp[i][j] = False
+                        else:
+                            dp[i][j] = dp[i+1][j+1] and (self.isMatchOfSingleCharacter(text[i],pattern[j]) )
+                        
+        return dp[0][0]
+        
+    def isMatchOfSingleCharacter(self,textCharacter,patternCharacter)->bool:
+            return patternCharacter == '.' or patternCharacter == textCharacter
+```
+
+
+
+### Tips
+
+
+
+最容易想到的是递归的方法
+
+如果 `pattern` 第二位为 `*`  此时有两种情况
+
+- 检查 `text` 和 `pattern[2:]` 是否匹配，即 `*` 使前面字符出现 0 次
+- 如果 `pattern` 和 `text` 的第一位匹配，检查 `text[1:]` 和 `pattern` 是否匹配
+
+否则： 如果 `pattern` 和 `text` 的第一位匹配，检查 `text[1:]` 和 `pattern[1:]` 是否匹配
+
+复杂度分析：
+
+- 显然跟 `pattern` 中 `*` 的个数有关，设长度分别为 $T,P$ ，最坏情况下有$P/2$ 个 `*`  设复杂度为$f(T,P)$
+
+  - $P=0$ 时为 $O(1)$, $T=0$时为 $O(P)$ $P=2$ 时为 $O(T)$
+  - $P$ 每增加 2: $f(T,P+2) = f(T,P)+f(T-1,P+2)$  
+  - 问题转化为
+    - $f(0,0)=1,f(0,n) = n ,f(m,0)= 1$
+    - $f(m,n)=f(m,n-1)+f(m-1,n)$
+
+  - $f(m,n) = \binom{n+m+1}{n}- \binom{n+m-1}{m}  = O(e^{m+n})$ 
+
+- 复杂度为 $O(e^{T+\frac P 2})​$
+
+
+
+**动态规划**
+
+用 $dp[i][j]$ 记录 `text[i:]` 和 `pattern[j:]` 匹配的结果，从而避免重复的运算，从而有
+
+- 如果 `pattern[j+1] == '*'` ,  `dp[i][j]= dp[i][j+2] ` or `dp[i+1][j] and  text[i]==pattern[j]`
+- 否则 `dp[i][j]= text[i]==pattern[j] and dp[i+1][j+1]`  
+
+
+
+**References**
+
+1. [Regular Expression Matching - LeetCode Articles](https://leetcode.com/articles/regular-expression-matching/)
+
+   
 
 ## Problem X
 
