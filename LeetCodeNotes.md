@@ -2,11 +2,12 @@
 
 [TOC]
 
-## Problem 1
+## 1.[Two Sum](https://leetcode.com/problems/two-sum)
 
 
 
 ### Problem Description
+
 > Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 > You may assume that each input would have exactly one solution, and you may not use the same element twice.
 > Example:
@@ -16,6 +17,7 @@
 > > return [0, 1].
 
 ### Solution
+
 First version
 ```python
 class Solution:
@@ -57,7 +59,7 @@ class Solution:
 - `enumerate` 的使用
 - `dict` 的使用
 
-## Problem 2
+## 2.[Add Two Numbers](https://leetcode.com/problems/add-two-numbers)
 
 ### Problem Description
 > You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
@@ -159,7 +161,7 @@ class Solution:
 - 保证 l1 为较长的一个
 - 利用 l1 存储，节省空间
 
-## Problem 3
+## 3.[Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters)
 
 ### Problem Description
 > Given a string, find the length of the longest substring without repeating characters.
@@ -213,7 +215,7 @@ class Solution:
 
 时间复杂度：$O(n)$
 
-## Problem 4
+## 4.[Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays)
 
 ### Problem Description
 
@@ -332,7 +334,7 @@ class Solution:
 
 TODO： 进一步优化
 
-## Problem 5
+## 5.[Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring)
 
 ### Problem Description
 > Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
@@ -435,7 +437,7 @@ References:
 3. [Manacher's Algorithm 马拉车算法 - Grandyang - 博客园](https://www.cnblogs.com/grandyang/p/4475985.html)
   
 
-## Problem 6
+## 6.[ZigZag Conversion](https://leetcode.com/problems/zigzag-conversion)
 
 ### Problem Description
 > The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
@@ -523,8 +525,7 @@ class Solution:
 - 最后一行单独处理
 - 另一个思路：用特殊符号如`#`补齐到完整的周期 然后从结果中删去
 
-
-## Problem 7
+## 7.[Reverse Integer](https://leetcode.com/problems/reverse-integer)
 
 ### Problem Description
 > Given a 32-bit signed integer, reverse digits of an integer.
@@ -571,7 +572,7 @@ class Solution:
 
 - Boring
 
-## Problem 8
+## 8.[String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi)
 
 ### Problem Description
 
@@ -622,8 +623,7 @@ class Solution:
 
 > It's not algorithm,it's a if-else practice :(
 
-
-## Problem 9
+## 9.[Palindrome Number](https://leetcode.com/problems/palindrome-number)
 
 ### Problem Description
 > Determine whether an integer is a palindrome. An integer is a palindrome when it reads the same backward as forward.
@@ -658,7 +658,7 @@ def isPalindrome(self, x: int) -> bool:
 - 刚开始考虑类似迭代的思路，每次去除最高位和最低位，但对于 10101 类型出错
 - 需要引入 range /= 100，同时也不需要每次取 log
 
-## Problem 10
+## 10.[Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching)
 
 ### Problem Description
 Given an input string (`s`) and a pattern (`p`), implement regular expression matching with support for `'.'` and `'*'`.
@@ -765,7 +765,7 @@ class Solution:
 
 
 
-## Problem 11
+## 11.[Container With Most Water](https://leetcode.com/problems/container-with-most-water)
 
 ### Problem Description
 
