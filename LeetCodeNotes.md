@@ -2,12 +2,15 @@
 
 [TOC]
 
-## Problem 1 Two Sum
+## Problem 1
+
+
 
 ### Problem Description
 > Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 > You may assume that each input would have exactly one solution, and you may not use the same element twice.
 > Example:
+>
 > > Given nums = [2, 7, 11, 15], target = 9,
 > > Because nums[0] + nums[1] = 2 + 7 = 9,
 > > return [0, 1].
@@ -156,7 +159,7 @@ class Solution:
 - 保证 l1 为较长的一个
 - 利用 l1 存储，节省空间
 
-## Problem 3 Longest Substring Without Repeating Characters
+## Problem 3
 
 ### Problem Description
 > Given a string, find the length of the longest substring without repeating characters.
@@ -760,7 +763,68 @@ class Solution:
 
 1. [Regular Expression Matching - LeetCode Articles](https://leetcode.com/articles/regular-expression-matching/)
 
-   
+
+
+## Problem 11
+
+### Problem Description
+
+Given *n* non-negative integers *a1*, *a2*, ..., *an* , where each represents a point at coordinate (*i*, *ai*). *n* vertical lines are drawn such that the two endpoints of line *i* is at (*i*, *ai*) and (*i*, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+**Note:** You may not slant the container and *n* is at least 2.
+
+ 
+
+![img](assets/question_11.jpg)
+
+The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+
+**Example:**
+
+```
+Input: [1,8,6,2,5,4,8,3,7]
+Output: 49
+```
+
+
+
+### Solution
+
+```python
+#
+# @lc app=leetcode id=11 lang=python3
+#
+# [11] Container With Most Water
+#
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        rightBoundIndex = len(height)-1
+        leftBoundIndex = 0
+        maxArea = min(height[leftBoundIndex],height[rightBoundIndex])*(rightBoundIndex-leftBoundIndex)
+
+        while leftBoundIndex < rightBoundIndex:
+            if height[leftBoundIndex] < height[rightBoundIndex]:# If left is higher than right, then move the left bound
+                leftBoundIndex += 1         
+            else: rightBoundIndex -= 1
+            
+            maxArea = max(maxArea,min(height[leftBoundIndex],height[rightBoundIndex])*(rightBoundIndex-leftBoundIndex))
+
+        return maxArea
+            
+```
+
+### Tips
+
+**Two Pointer**
+
+- 问题在于如何更新左右边界
+
+  - 方向：从两边开始往中间走
+  - 由于宽度减少，想要面积更大，必须要增加高度
+  - 如果短边不变，长边改变（无论增加还是减少），高度不会增加
+  - 因此每次从较短的一边开始变化
+
+  
 
 ## Problem X
 
