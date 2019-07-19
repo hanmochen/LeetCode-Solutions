@@ -1171,6 +1171,155 @@ class Solution:
 
 
 
+## 15. 3Sum
+
+
+
+### Problem Description
+
+Given an array `nums` of *n* integers, are there elements *a*, *b*, *c* in `nums` such that *a* + *b* + *c* = 0? Find all unique triplets in the array which gives the sum of zero.
+
+**Note:**
+
+The solution set must not contain duplicate triplets.
+
+**Example:**
+
+```text
+Given array nums = [-1, 0, 1, 2, -1, -4],
+
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+```
+
+
+
+### Solution
+
+First Version
+
+```python
+#
+# @lc app=leetcode id=15 lang=python3
+#
+# [15] 3Sum
+#
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if(not nums): return []
+        tripletSet = []
+        sortedNumbers = sorted(nums)
+        currentIndex = 0
+        while currentIndex < len(sortedNumbers)-2 :
+            currentNumber = sortedNumbers[currentIndex]
+            leftBound = currentIndex + 1 
+            rightBound = len(sortedNumbers)-1
+            while(leftBound < rightBound):
+                sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                if(sum == 0):
+                    tripletSet.append([currentNumber,sortedNumbers[leftBound],sortedNumbers[rightBound]])
+                    while(sum==0 and leftBound<rightBound):
+                        leftBound += 1
+                        sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                elif(sum > 0): rightBound -= 1
+                else: leftBound += 1
+            
+            while(currentIndex<len(sortedNumbers)-2 and sortedNumbers[currentIndex]==currentNumber):
+                currentIndex += 1
+            
+
+        return tripletSet   
+                    
+```
+
+Add a line and greatly improved
+
+```python
+#
+# @lc app=leetcode id=15 lang=python3
+#
+# [15] 3Sum
+#
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if(not nums): return []
+        tripletSet = []
+        sortedNumbers = sorted(nums)
+        currentIndex = 0
+        while currentIndex < len(sortedNumbers)-2 :
+            currentNumber = sortedNumbers[currentIndex]
+            #ADD A LINE
+            if(currentNumber>0): return tripletSet
+            leftBound = currentIndex + 1 
+            rightBound = len(sortedNumbers)-1
+            while(leftBound < rightBound):
+                sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                if(sum == 0):
+                    tripletSet.append([currentNumber,sortedNumbers[leftBound],sortedNumbers[rightBound]])
+                    while(sum==0 and leftBound<rightBound):
+                        leftBound += 1
+                        sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                elif(sum > 0): rightBound -= 1
+                else: leftBound += 1
+            
+            while(currentIndex<len(sortedNumbers)-2 and sortedNumbers[currentIndex]==currentNumber):
+                currentIndex += 1
+            
+
+        return tripletSet   
+                    
+```
+
+
+
+Smarter ways of doing this
+
+- Using `bisect`
+- Using `counts`
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        ans=[]
+        counts={}
+        for i in nums:
+            if i in counts:
+                counts[i]+=1
+            else:
+                counts[i]=1
+        nums=sorted(counts)
+        for i,num in enumerate(nums):
+            if counts[num]>=2:
+                if num==0:
+                    if counts[num]>=3:
+                        ans.append([0,0,0])
+                else:
+                    if (-2*num) in nums:
+                        ans.append([num,num,-2*num])
+            if num<0:
+                twosum=-num
+                left=bisect.bisect_left(nums,(twosum-nums[-1]), i+1)
+                for i in nums[left:bisect.bisect_right(nums,(twosum//2),left)]:
+                    j=twosum-i
+                    if j in counts and j!=i:
+                        ans.append([num,i,j])
+        return ans
+```
+
+
+
+### Tips
+
+- 问题主要在`不重` `不漏`
+- 算法复杂度为$O(n^2)$ 但仍有可改进的地方
+  - 引入 `counts` 数组避免重复比较和移动（缺点：可能占用大量空间？）
+  - 查找时可以使用二分查找，尽管在查找这一部分复杂度从$O(n)$ 降低为$O(log(n))$ 但整体复杂度仍然为$O(n^2)$
+
+- `bisect`的使用
+
 ## Problem X
 
 ### Problem Description
