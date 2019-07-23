@@ -1317,8 +1317,70 @@ class Solution:
 - 算法复杂度为$O(n^2)$ 但仍有可改进的地方
   - 引入 `counts` 数组避免重复比较和移动（缺点：可能占用大量空间？）
   - 查找时可以使用二分查找，尽管在查找这一部分复杂度从$O(n)$ 降低为$O(log(n))$ 但整体复杂度仍然为$O(n^2)$
-
 - `bisect`的使用
+
+
+
+## 16. 3Sum Closest
+
+### Problem Description
+
+Given an array `nums` of *n* integers and an integer `target`, find three integers in `nums` such that the sum is closest to `target`. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+**Example:**
+
+```
+Given array nums = [-1, 2, 1, -4], and target = 1.
+
+The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+```
+
+
+
+### Solution 
+
+```python
+#
+# @lc app=leetcode id=15 lang=python3
+#
+# [15] 3Sum
+#
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if(not nums): return []
+        tripletSet = []
+        sortedNumbers = sorted(nums)
+        currentIndex = 0
+        while currentIndex < len(sortedNumbers)-2 :
+            currentNumber = sortedNumbers[currentIndex]
+            if(currentNumber>0): return tripletSet
+            leftBound = currentIndex + 1 
+            rightBound = len(sortedNumbers)-1
+            while(leftBound < rightBound):
+                if(sortedNumbers[leftBound]+currentNumber>0): break
+                sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                if(sum == 0):
+                    tripletSet.append([currentNumber,sortedNumbers[leftBound],sortedNumbers[rightBound]])
+                    while(sum==0 and leftBound<rightBound):
+                        leftBound += 1
+                        sum = currentNumber+sortedNumbers[leftBound]+sortedNumbers[rightBound]
+                elif(sum > 0): rightBound -= 1
+                else: leftBound += 1
+            
+            while(currentIndex<len(sortedNumbers)-2 and sortedNumbers[currentIndex]==currentNumber):
+                currentIndex += 1
+            
+
+        return tripletSet
+```
+
+
+
+### Tips
+
+- 相较于上一题问题变复杂了，但思路可以简化：不需要考虑重复的情况
+
+
 
 ## Problem X
 
