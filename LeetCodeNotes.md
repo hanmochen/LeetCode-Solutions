@@ -1921,3 +1921,43 @@ class Solution:
 
 
 
+## 24. Swap Nodes in Pairs
+
+
+
+### Problem Description
+
+Given a linked list, swap every two adjacent nodes and return its head.
+
+You may **not** modify the values in the list's nodes, only nodes itself may be changed.
+
+ 
+
+**Example:**
+
+```
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+```
+
+
+
+### Solution
+
+```python
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        position = dummy = ListNode(0)
+        dummy.next = head
+        while(position.next and position.next.next):
+            temp = position.next
+            position.next = temp.next
+            temp.next = position.next.next
+            position.next.next = temp
+            position = position.next.next
+        return dummy.next 
+```
+
+
+
+### Tips
+
