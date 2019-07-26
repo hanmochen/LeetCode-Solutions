@@ -1820,3 +1820,104 @@ class Solution:
 
 - 见到题目的第一感与卡特兰数有关
 
+
+
+## 23. Merge k Sorted Lists
+
+
+
+### Problem Description 
+
+Merge *k* sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+**Example:**
+
+```text
+Input:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+Output: 1->1->2->3->4->4->5->6
+```
+
+
+
+### Solution
+
+
+
+Using `PriorityQueue`
+
+```python
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        from queue import PriorityQueue
+        head = point = ListNode(0)
+        q = PriorityQueue()
+        count = 0
+        for l in lists:
+            if l:
+                q.put((l.val, count,l))
+                count += 1
+        while not q.empty():
+            val,_,node = q.get()
+            point.next = ListNode(val)
+            point = point.next
+            node = node.next
+            if node:
+                q.put((node.val,count,node))
+                count += 1 
+        return head.next
+```
+
+
+
+Using `heap`
+
+
+
+```python
+from heapq import heappush, heappop
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if not lists: return None
+        
+        heap = []
+        for node in lists:
+            if node:
+                heappush(heap, (node.val, id(node), node))
+                
+        head = current = ListNode(None) # dummy head
+        
+        while heap:
+            node = heappop(heap)[2]
+            if node.next:
+                heappush(heap, (node.next.val, id(node.next), node.next))
+            current.next = node
+            current = node
+        
+        return head.next
+```
+
+
+
+### Tips
+
+- 最简单的思路 ：k 个结点，每次找到最小的，加入，后移，复杂度$O(Nk)$ $N$ 为节点数，$k$ 为链表数 
+- 改进的想法：每次找到最小值，不需要比较$k$ 次，只需比较$\log k$ 次
+  - 利用堆的数据结构
+  - 或者优先队列
+
+- 需要注意的是，由于可能出现 `node.value` 相同的情况，这时会默认比较 `node` 而 `ListNode` 类并没有重载 `<` 运算符从而会报错。解决方法：每一个进入 `heap` 或 `PriorityQueue` 的 `tuple` 加入一个 `identifier` 在 `node` 之前，`identifier`可以使用 `id()` 或者 `count` 计数
+
+
+
+**References**:
+
+1. [queue — A synchronized queue class — Python 3.7.4 documentation](https://docs.python.org/3/library/queue.html?highlight=priority%20queue)
+2. [heapq — Heap queue algorithm — Python 3.7.4 documentation](https://docs.python.org/3/library/heapq.html?highlight=priority%20queue)
+
+
+
