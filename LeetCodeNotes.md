@@ -2312,12 +2312,34 @@ def findNext(pattern: str)-> [int]:
             else: return -1
 ```
 
+
+
+改进的 `KMP` 算法
+
+对于上面的 `next` 数组 如果满足 `pattern[j]= pattern[next[j]]` 那么如果 `text[i]!=pattern[j]` 依然有 `text[i]!= pattern[next[j]]` 为了避免重复匹配，在计算 `next` 数组的时候可以检查 `pattern[j]=pattern[next[j]]` 则令 `next[j]=next[next[j]]`
+
+
+
+改进后的实现
+
+```python
+        def findNext(pattern: str)-> [int]:
+            next = len(pattern)*[-1]
+            r,k = 0,-1
+            while(r<len(pattern)-1):
+                while(k>=0 and pattern[r] != pattern[k]):
+                    k = next[k]
+                k += 1
+                r += 1
+                
+                next[r] = next[k] if(pattern[r]== pattern[k]) else k
+            return next
+```
+
 **References**
 
 1. [The Knuth-Morris-Pratt Algorithm in my own words - jBoxer](http://jakeboxer.com/blog/2009/12/13/the-knuth-morris-pratt-algorithm-in-my-own-words/)
 2. [字符串匹配的KMP算法 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html)
 
    
-
-
 

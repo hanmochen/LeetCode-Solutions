@@ -13,20 +13,18 @@ class Solution:
                     k = next[k]
                 k += 1
                 r += 1
-                next[r] = k
+                
+                next[r] = next[k] if(pattern[r]== pattern[k]) else k
             return next
 
-        def KMP(text:str, pattern: str )-> int:
-            next = findNext(pattern)
-            i,j = 0,0
-            while(i<len(text) and j<len(pattern)):
-                if(j== -1 or text[i] == pattern[j]):
-                    i += 1
-                    j += 1
-                else:
-                    j = next[j]
-            if(j == len(pattern)):return i-j
-            else: return -1
-
-        return KMP(haystack,needle)
+        if not needle: return 0
+        next = findNext(needle)
+        i,j = 0,0
+        while(i<len(haystack) and j<len(needle)):
+            if(j== -1 or haystack[i] == needle[j]):
+                i += 1
+                j += 1
+            else:
+                j = next[j]
+        return i-j if(j == len(needle)) else -1 
 
