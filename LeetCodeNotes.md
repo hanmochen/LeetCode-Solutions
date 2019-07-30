@@ -2343,3 +2343,142 @@ def findNext(pattern: str)-> [int]:
 
    
 
+
+
+## 29. Divide Two Integers
+
+
+
+### Problem Description
+
+
+
+Given two integers `dividend` and `divisor`, divide two integers without using multiplication, division and mod operator.
+
+Return the quotient after dividing `dividend` by `divisor`.
+
+The integer division should truncate toward zero.
+
+**Example 1:**
+
+```
+Input: dividend = 10, divisor = 3
+Output: 3
+```
+
+**Example 2:**
+
+```
+Input: dividend = 7, divisor = -3
+Output: -2
+```
+
+**Note:**
+
+- Both dividend and divisor will be 32-bit signed integers.
+- The divisor will never be 0.
+- Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. For the purpose of this problem, assume that your function returns 231 − 1 when the division result overflows.
+
+
+
+### Solution
+
+First Version
+
+```python
+
+# @lc app=leetcode id=29 lang=python3
+
+# [29] Divide Two Integers
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        if divisor == 1 : return dividend
+        INT_MAX = 2**31 -1
+        INT_MIN = - 2**31
+        if divisor == -1 : 
+            return -dividend if dividend != INT_MIN else INT_MAX
+        flag = (divisor>0 and dividend >0) or (divisor<0 and dividend <0) 
+        absOfDividend = abs(dividend)
+        absOfDivisor = abs(divisor)
+        if(absOfDividend<absOfDivisor): return 0
+        multipliers = [absOfDivisor]
+        powersOfTwo = [1]
+        index = 0
+        while(multipliers[index]+multipliers[index] <= absOfDividend):       
+            multipliers.append(multipliers[index]+multipliers[index])
+            powersOfTwo.append(powersOfTwo[index]+powersOfTwo[index])
+            index += 1
+        
+        times = 0
+        remains = absOfDividend
+        while(remains>=absOfDivisor):
+            if remains>= multipliers[index]:
+                remains -= multipliers[index]
+                times += powersOfTwo[index]
+            multipliers.pop()
+            powersOfTwo.pop()
+            index -= 1
+        
+        return times if flag else -times
+
+```
+
+Improved 
+
+```python
+
+# @lc app=leetcode id=29 lang=python3
+
+# [29] Divide Two Integers
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        if divisor == 1 : return dividend
+        INT_MAX = 2**31 -1
+        INT_MIN = - 2**31
+        if divisor == -1 : 
+            return -dividend if dividend != INT_MIN else INT_MAX
+        flag = (divisor>0 and dividend >0) or (divisor<0 and dividend <0) 
+        absOfDividend = abs(dividend)
+        absOfDivisor = abs(divisor)
+        if(absOfDividend<absOfDivisor): return 0
+
+        def findMaxPower(divisor:int,dividend:int)-> int:
+            low = 0
+            high = 31
+            res = 15
+            while(divisor<<(res+1) <= dividend or divisor<<res > dividend):
+                if divisor<<(res+1) == dividend: return res+1
+                elif divisor<<(res+1) < dividend:
+                    low = res+1  
+                elif divisor<<res > dividend:
+                    high = res
+                res = (high+low)>>1
+            return res
+        
+        nPowers = findMaxPower(absOfDivisor,absOfDividend)
+        powersOfTwo = 1<<nPowers
+        multipliers = absOfDivisor<<nPowers    
+        times = 0
+        remains = absOfDividend
+        while(remains>=absOfDivisor):
+            if remains>= multipliers :
+                remains -= multipliers
+                times += powersOfTwo
+            multipliers >>= 1
+            powersOfTwo >>= 1
+        
+        return times if flag else -times
+```
+
+
+
+### Tips
+
+- 开始的想法是除数逐渐倍增，存在数组里，然后逐个减被除数
+- 改进之后，不需要数组存储，用右移左移等位运算即可，节省存储空间
+- 一开始寻找$k$ 满足$2^k \times a \leqslant b <2^{k+1}\times a$ 可以使用二分查找，从 32 次降到 5 次，提高了时间效率
+
+
+
