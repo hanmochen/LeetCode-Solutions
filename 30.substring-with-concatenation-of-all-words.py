@@ -5,21 +5,42 @@
 #
 class Solution:
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
-        if not (words and s) : return []
-        indices = []
+        if not (words and s): return []
         wordLength = len(words[0])
         listLength = len(words)
-        wordsHashTable = [hash(word) for word in words]
-        textHashTable = [hash(s[i:i+wordLength]) for i in range(len(s)-wordLength+1)]
 
-        for i in range(len(s)-wordLength*listLength+1):
-            if textHashTable[i] in wordsHashTable:
-                j = i
-                tempHashTable = [hash(word) for word in words]
-                while j<len(textHashTable) and textHashTable[j] in tempHashTable:
-                    tempHashTable.remove(textHashTable[j])
-                    j += wordLength
-                if not tempHashTable: indices.append(i)
+        # building dictionary for word count
+        wordCountDictionary = {}
+        for word in words:
+            if word in wordCountDictionary:
+                wordCountDictionary[word] += 1
+            else:
+                wordCountDictionary[word] = 1
         
-        return indices
+        ans = []
+        
+        for firstIndex in range(wordLength):
+            left = firstIndex
+            substringDictionary = {}
+            count = listLength
+            for j in range(firstIndex, len(s)-wordLength+1, wordLength):
+                tempWord = s[j:j+wordLength]
+                if tempWord in wordCountDictionary:
+                    if tempWord in substringDictionary:
+                        substringDictionary[tempWord] += 1
+                        while substringDictionary[tempWord] > wordCountDictionary[tempWord]:
+                            substringDictionary[s[left:left+wordLength]] -= 1
+                            left += wordLength
+                            count += 1
+                    else:
+                        substringDictionary[tempWord] = 1
+                    count -= 1
+                    
+                    if not count: ans.append(left)
+                else:
+                    left = j + wordLength
+                    substringDictionary = {}
+                    count = listLength
+
+        return ans
 

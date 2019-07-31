@@ -2485,3 +2485,134 @@ class Solution:
 
 
 
+## 30. Substring with Concatenation of All Words
+
+
+
+### Problem Description
+
+```
+You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
+
+Example 1:
+
+Input:
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+Example 2:
+
+Input:
+  s = "wordgoodgoodgoodbestword",
+  words = ["word","good","best","word"]
+Output: []
+```
+
+
+
+### Solution
+
+
+
+**Brute-Force with Hash-Value**
+
+```python
+#
+# @lc app=leetcode id=30 lang=python3
+#
+# [30] Substring with Concatenation of All Words
+#
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        if not (words and s) : return []
+        indices = []
+        wordLength = len(words[0])
+        listLength = len(words)
+        wordsHashTable = [hash(word) for word in words]
+        textHashTable = [hash(s[i:i+wordLength]) for i in range(len(s)-wordLength+1)]
+
+        for i in range(len(s)-wordLength*listLength+1):
+            if textHashTable[i] in wordsHashTable:
+                j = i
+                tempHashTable = [hash(word) for word in words]
+                while j<len(textHashTable) and textHashTable[j] in tempHashTable:
+                    tempHashTable.remove(textHashTable[j])
+                    j += wordLength
+                if not tempHashTable: indices.append(i)
+            i += 1
+        
+        return indices
+
+```
+
+
+
+**Sliding Window**
+
+
+
+```python
+#
+# @lc app=leetcode id=30 lang=python3
+#
+# [30] Substring with Concatenation of All Words
+#
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        if not (words and s): return []
+        wordLength = len(words[0])
+        listLength = len(words)
+
+        # building dictionary for word count
+        wordCountDictionary = {}
+        for word in words:
+            if word in wordCountDictionary:
+                wordCountDictionary[word] += 1
+            else:
+                wordCountDictionary[word] = 1
+        
+        ans = []
+        
+        for firstIndex in range(wordLength):
+            left = firstIndex
+            substringDictionary = {}
+            count = listLength
+            for j in range(firstIndex, len(s)-wordLength+1, wordLength):
+                tempWord = s[j:j+wordLength]
+                if tempWord in wordCountDictionary:
+                    if tempWord in substringDictionary:
+                        substringDictionary[tempWord] += 1
+                        while substringDictionary[tempWord] > wordCountDictionary[tempWord]:
+                            substringDictionary[s[left:left+wordLength]] -= 1
+                            left += wordLength
+                            count += 1
+                    else:
+                        substringDictionary[tempWord] = 1
+                    count -= 1
+                    
+                    if not count: ans.append(left)
+                else:
+                    left = j + wordLength
+                    substringDictionary = {}
+                    count = listLength
+
+        return ans
+
+```
+
+
+
+### Tips
+
+
+
+- Brute Force 很好写出来，但是改进空间很大
+- 滑动窗口： 设单个 `word` 的长度为 `wordLength` 从 `0：wordLength` 分别开始，每隔 `wordLength` 分隔原字符串即为 `tempWord` 
+  - 如果 `tempWord` 在 `words` 里面，窗口向右延伸 `wordLength` ，但是也要分两种情况（可以参考第 3 题的思路）
+    - 当前窗口内`tempWord`过多，窗口左边界向右滑动 `wordLength` 
+    - 否则，左边界不动
+  - 如果 `tempWord` 不在 `words` 里面，则窗口左边界设为当前坐标
+
+- 为了统计 `word` 的数量，需要新建一个字典 `wordCountDictionary` 
