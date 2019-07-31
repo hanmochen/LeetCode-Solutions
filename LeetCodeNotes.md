@@ -2,6 +2,7 @@
 
 [TOC]
 
+
 ## 1.[Two Sum](https://leetcode.com/problems/two-sum)
 
 
@@ -2479,6 +2480,8 @@ class Solution:
 - 开始的想法是除数逐渐倍增，存在数组里，然后逐个减被除数
 - 改进之后，不需要数组存储，用右移左移等位运算即可，节省存储空间
 - 一开始寻找$k$ 满足$2^k \times a \leqslant b <2^{k+1}\times a$ 可以使用二分查找，从 32 次降到 5 次，提高了时间效率
+
+
 
 
 
