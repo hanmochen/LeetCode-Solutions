@@ -8,25 +8,13 @@ class Solution:
         s = s.lstrip(')').rstrip('(')
         if not s: return 0
         l = len(s)
-        dp = l*[-1]
-        maxLength = 2
+        dp = l*[0]
         for index in range(1,l):
             if s[index]== ')':
-                left = index-1
-                if(s[left] == '('):
-                    if(left == 0 or s[left-1] == '('):
-                        dp[index]=left
-                    else:
-                        dp[index]=dp[left-1] if(dp[left-1]!= -1) else left
-                        maxLength = max(maxLength,index-dp[index]+1)
+                if(s[index-1] == '('):
+                    dp[index]=2 if(index == 1) else dp[index-2]+2 
                 else:
-                    if dp[left]<= 0:
-                        dp[index] = -1
-                    elif s[dp[left]-1]=='(':
-                        left = dp[left]-1
-                        dp[index]=dp[left-1] if(dp[left-1]!= -1) else left
-                        maxLength = max(maxLength,index-dp[index]+1)
-
-        return maxLength
-            
+                    left = index-1-dp[index-1]
+                    dp[index] = 0 if(left < 0 or s[left] == ')') else dp[left-1]+dp[index-1]+2
+        return max(dp)
 
