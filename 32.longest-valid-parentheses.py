@@ -5,16 +5,16 @@
 #
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
-        s = s.lstrip(')').rstrip('(')
-        if not s: return 0
-        l = len(s)
-        dp = l*[0]
-        for index in range(1,l):
-            if s[index]== ')':
-                if(s[index-1] == '('):
-                    dp[index]=2 if(index == 1) else dp[index-2]+2 
+        indexStack = [-1]
+        maxLen = 0
+        for index,char in enumerate(s):
+            if char == '(':
+                indexStack.append(index)
+            else:
+                indexStack.pop()
+                if indexStack:
+                    lastIndex = indexStack[-1]
+                    maxLen = max(maxLen,index-lastIndex)
                 else:
-                    left = index-1-dp[index-1]
-                    dp[index] = 0 if(left < 0 or s[left] == ')') else dp[left-1]+dp[index-1]+2
-        return max(dp)
-
+                    indexStack.append(index)          
+        return maxLen
