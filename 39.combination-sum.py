@@ -8,22 +8,24 @@ class Solution:
         def combinations(sortedCandidates,target):
             if not sortedCandidates: return []
             combinationSet = []
-            largestCandidate = sortedCandidates.pop()
+            smallestCandidate = sortedCandidates.pop(0)
+            if smallestCandidate>target: return []
+            if not sortedCandidates:
+                return [] if target%smallestCandidate else [(target//smallestCandidate)*[smallestCandidate]]
+        
             count = 0
             while(target>0):
                 for combination in combinations(sortedCandidates.copy(),target):
-                    combinationSet.append(count*[largestCandidate]+combination)
-                target -= largestCandidate
+                    combinationSet.append(count*[smallestCandidate]+combination)
+                target -= smallestCandidate
                 count += 1
             if target == 0: 
-                combinationSet.append(count*[largestCandidate])
-
+                combinationSet.append(count*[smallestCandidate])
+    
             return combinationSet
         
         candidates.sort()
         return combinations(candidates,target)
-
-
 
 
 
