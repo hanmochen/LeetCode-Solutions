@@ -5,12 +5,16 @@
 #
 class Solution:
     def trap(self, height: List[int]) -> int:
-        if len(height)<3: return 0
-        maxValue = max(height[1:-1])
-        if maxValue<height[0] and maxValue<height[-1]:
-            h = min(height[0],height[-1])
-            return (len(height)-2)*h - sum(height[1:-1])
-        else:
-            maxIndex = height[1:-1].index(maxValue)+1
-            return self.trap(height[:maxIndex+1])+self.trap(height[maxIndex:])
-
+        left,right = 0,len(height)-1
+        maxLeft = maxRight = 0
+        volume = 0
+        while(left<=right):
+            maxLeft = max(maxLeft,height[left])
+            maxRight = max(maxRight,height[right])
+            if maxLeft<maxRight:
+                volume += min(maxLeft,maxRight) - height[left]
+                left += 1
+            else:
+                volume += min(maxLeft,maxRight)-height[right]
+                right -= 1
+        return volume
