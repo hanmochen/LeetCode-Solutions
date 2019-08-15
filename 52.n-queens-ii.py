@@ -6,12 +6,11 @@
 class Solution:
     def totalNQueens(self, n: int) -> int:
         
-        count = 0
+        count = [0]
         def DFS(positions,sums,diffs):
             m = len(positions)
-            nonlocal count
             if m == n:
-                count += 1
+                count[0] += 1
                 return
             for i in range(n):
                 if not (i in positions or (m+i) in sums or (m-i) in diffs):
@@ -19,12 +18,6 @@ class Solution:
 
         DFS([],[],[])
 
-        return count
-
-
-
-
-  
-
-       
+        return count[0]
+   
 
