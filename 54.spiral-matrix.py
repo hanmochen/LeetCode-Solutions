@@ -5,31 +5,8 @@
 #
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
-
-            
-            if not matrix: return []
-            answer = []
-            m = len(matrix)
-            n = len(matrix[0])
-
-            leftBound = 0
-            rightBound = len(matrix[0])-1
-            upBound = 1
-            downBound = len(matrix)-1
-
-            count = 0
-
-            pos_x = 0
-            pos_y = 0
-            direction = 0 
-            
-            # 0 Stands for right
-            # 1 Stands for down
-            # 2 Stands for left
-            # 3 Stands for up
-
-            while(count < m*n):
-                answer.append(matrix[pos_x][pos_y])
+            def generateNextPosition():
+                nonlocal pos_x,pos_y,direction,count,rightBound,leftBound,upBound,downBound
                 if direction == 0:
                     if pos_y == rightBound:
                         direction = 1
@@ -60,6 +37,32 @@ class Solution:
                         pos_x -= 1
                 
                 count += 1
+
+            
+            if not matrix: return []
+            answer = []
+            m = len(matrix)
+            n = len(matrix[0])
+
+            leftBound = 0
+            rightBound = len(matrix[0])-1
+            upBound = 1
+            downBound = len(matrix)-1
+
+            count = 0
+
+            pos_x = 0
+            pos_y = 0
+            direction = 0 
+            
+            # 0 Stands for right
+            # 1 Stands for down
+            # 2 Stands for left
+            # 3 Stands for up
+
+            while(count < m*n):
+                answer.append(matrix[pos_x][pos_y])
+                generateNextPosition()
             
             return answer
         
