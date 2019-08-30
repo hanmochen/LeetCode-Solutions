@@ -1,4 +1,8 @@
-
+#
+# @lc app=leetcode id=72 lang=python3
+#
+# [72] Edit Distance
+#
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
         # if not word1: return len(word2)
@@ -16,12 +20,6 @@ class Solution:
             for j in range(1,len(word1)+1):
                 dp[i][j] = dp[i-1][j-1] if word1[j-1] == word2[i-1] else 1+min(dp[i][j-1],dp[i-1][j-1],dp[i-1][j])
         return dp[-1][-1]
-            
+             
+        
 
-
-
-                
-s = Solution()
-word1 = "intention"
-word2 = "executio"
-print(s.minDistance(word1,word2))
