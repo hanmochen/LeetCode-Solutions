@@ -22,7 +22,3 @@ class Solution:
         
         return
 
-s= Solution()
-nums = [1,1,1]
-s.sortColors(nums)
-print(nums)
