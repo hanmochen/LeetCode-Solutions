@@ -13,34 +13,59 @@ class Solution:
                 if char in dic:
                     dic[char] += 1
                 else: dic[char] = 1
+            return dic
         
         dicT = createDic(t)
+        setT = set(dicT.keys())
 
         left = 0
-        while(left<len(s) and s[left] not in dicT):
+        while( left<len(s) and s[left] not in dicT):
             left += 1
+
         if left == len(s): return ''
         
         right = left
-        dic = dicT.copy()
+        subDic = {}
+        subSet = setT.copy()
         pos = []
-        while(dic is not None):
+        while(subSet):
             if right == len(s): return ''
             if s[right] in dicT:
                 pos.append(right)
-                if s[right] in dic:
-                    if dic[s[right]] == 1:
-                        del dic[s[right]]
-                    else: dic[s[right]] -= 1
+                if s[right] in subDic:
+                    subDic[s[right]] += 1
+                else: subDic[s[right]] = 1
+
+                if subDic[s[right]] == dicT[s[right]]:
+                    subSet.remove(s[right])
+            
             right += 1
 
         window = s[left:right]
+        pos.pop(0)
+
 
         while(right <= len(s)):
-            if right == len(s): return window
-            if s[right]
+            
+            while(subDic[s[left]] > dicT[s[left]]):
+                subDic[s[left]] -= 1
+                left = pos.pop(0)
+                if right-left < len(window):
+                    window = s[left:right]
 
+            subDic[s[left]] -= 1
+            while(subDic[s[left]] < dicT[s[left]]):
+                if right == len(s): return window
+                if s[right] in dicT:
+                    pos.append(right)
+                    subDic[s[right]] += 1
+                right += 1
+            left = pos.pop(0)
+            if right-left < len(window):
+                window = s[left:right]
+    
 
+        return window
 
 
 
