@@ -7,43 +7,32 @@ class Solution:
     def minWindow(self, s: str, t: str) -> str:
         
         if not t: return ''
-        def createDic(T):
-            dic = {}
-            for char in T:
-                if char in dic:
-                    dic[char] += 1
-                else: dic[char] = 1
-            return dic
-        
-        dicT = createDic(t)
-        setT = set(dicT.keys())
-
+        dicT = {}
+        for char in t:
+            if char in dicT:
+                dicT[char] += 1
+            else: dicT[char] = 1
+                
         left = 0
-        while( left<len(s) and s[left] not in dicT):
+        while(left<len(s) and s[left] not in dicT):
             left += 1
-
         if left == len(s): return ''
-        
-        right = left
-        subDic = {}
-        subSet = setT.copy()
+        right = left+1
+        subDic = {s[left]:1}
+        setT = set(dicT.keys())
         pos = []
-        while(subSet):
+        while(setT):
             if right == len(s): return ''
             if s[right] in dicT:
                 pos.append(right)
                 if s[right] in subDic:
                     subDic[s[right]] += 1
                 else: subDic[s[right]] = 1
-
                 if subDic[s[right]] == dicT[s[right]]:
-                    subSet.remove(s[right])
-            
+                    setT.remove(s[right])   
             right += 1
 
         window = s[left:right]
-        pos.pop(0)
-
 
         while(right <= len(s)):
             
@@ -66,6 +55,7 @@ class Solution:
     
 
         return window
+
 
 s= Solution()
 S = "bba"
