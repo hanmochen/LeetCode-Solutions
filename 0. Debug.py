@@ -1,31 +1,29 @@
 #
-# @lc app=leetcode id=80 lang=python3
+# @lc app=leetcode id=81 lang=python3
 #
-# [80] Remove Duplicates from Sorted Array II
+# [81] Search in Rotated Sorted Array II
 #
 class Solution:
-    def removeDuplicates(self, nums: [int]) -> int:
-        if not nums: return 0
-        temp = nums[0]
-        pos = 1
-        index = 1
+    def search(self, nums: [int], target: int) -> bool:
+        if not nums: return False
 
-        while(index < len(nums)):
-            count = nums[index] == temp 
-            nums[pos] = nums[index]
-            pos += 1
-            temp = nums[index]
-            index += 1
-            if count:                
-                while index<len(nums) and  nums[index] == temp:
-                    index += 1
+        low, high = 0, len(nums)
+
+        while(low < high):
+            mid = ( low + high ) // 2
+            if(nums[mid] == target): return True
+            
+            if( (nums[mid]<nums[0]) == (target < nums[0]) ):
+                if(nums[mid]>target): high = mid
+                else: low = mid+1
+            
+            elif(nums[mid]>target): low = mid+1
+            else: high = mid
         
-        return pos
-
-
+        return False
                 
 s= Solution()
-nums = [0]
+nums = [1,3,1,1]
+target = 3
+print(s.search(nums,target))
 
-print(s.removeDuplicates(nums))
-print(nums)
