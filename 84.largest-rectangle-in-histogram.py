@@ -6,7 +6,7 @@
 
 # @lc code=start
 class Solution:
-    def largestRectangleArea(self, heights: [int]) -> int:
+    def largestRectangleArea(self, heights: List[int]) -> int:
         def findLargestArea(begin: int, end: int):
             if begin == end: return 0
             if begin == end+1: return heights[begin]
@@ -37,11 +37,11 @@ class Solution:
                         left -= 1
                         area = max(area,minHeight*(right - left))
 
-
             return max(findLargestArea(begin,mid),findLargestArea(mid+1,end),area)   
-
         return findLargestArea(0,len(heights))
 
-s =Solution()
-print(s.largestRectangleArea(list(range(20000))))
+
+
+        
+# @lc code=end
 
