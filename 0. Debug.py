@@ -1,47 +1,44 @@
-#
-# @lc app=leetcode id=84 lang=python3
-#
-# [84] Largest Rectangle in Histogram
-#
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
 
-# @lc code=start
 class Solution:
-    def largestRectangleArea(self, heights: [int]) -> int:
-        def findLargestArea(begin: int, end: int):
-            if begin == end: return 0
-            if begin == end+1: return heights[begin]
-            mid = (begin + end)//2
-            left = mid
-            right = mid+1
-            minHeight = heights[mid]
-            area = heights[mid]
-            while(left > begin or right <end):
-                if(left > begin and right < end):
-                    if heights[left-1] >= heights[right]:
-                        minHeight = min(minHeight,heights[left-1])
-                        left -= 1
-                    else: 
-                        minHeight = min(minHeight,heights[right])
-                        right += 1
-                    area = max(area,minHeight*(right - left))
+    def partition(self, head: ListNode, x: int) -> ListNode: 
+        pos = ListNode(0)
+        pos.next = head
+        head = pos
+        while(pos.next and  pos.next.val<x):
+            pos = pos.next
+        curr = pos
+        while(curr.next):
+            if curr.next.val < x:             
+                temp = curr.next
+                curr.next = temp.next
+                temp.next = pos.next
+                pos.next = temp
+                pos =  pos.next
+            else:
+                curr = curr.next
+        return head.next
                 
-                elif left == begin:
-                    while(right < end):
-                        minHeight = min(minHeight,heights[right])
-                        right += 1
-                        area = max(area,minHeight*(right - left))
-                
-                else:
-                    while(left>begin):
-                        minHeight = min(minHeight,heights[left-1])
-                        left -= 1
-                        area = max(area,minHeight*(right - left))
+def printList(node):
+    while(node):
+        print(node.val)
+        node = node.next
 
+def createList(nums):
+    first = ListNode(nums[0])
+    pos = first
+    for i in range(1,len(nums)):
+        node = ListNode(nums[i]) 
+        pos.next = node
+        pos = pos.next  
 
-            return max(findLargestArea(begin,mid),findLargestArea(mid+1,end),area)   
+    return first
 
-        return findLargestArea(0,len(heights))
-
-s =Solution()
-print(s.largestRectangleArea(list(range(20000))))
-
+s = Solution()
+node = createList([1])
+printList(node)
+x = s.partition(head=node,x=3)
+printList(x)
