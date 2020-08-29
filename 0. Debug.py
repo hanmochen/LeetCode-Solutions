@@ -4,24 +4,17 @@ class ListNode:
         self.next = None
 
 class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode: 
-        pos = ListNode(0)
-        pos.next = head
-        head = pos
-        while(pos.next and  pos.next.val<x):
-            pos = pos.next
-        curr = pos
-        while(curr.next):
-            if curr.next.val < x:             
-                temp = curr.next
-                curr.next = temp.next
-                temp.next = pos.next
-                pos.next = temp
-                pos =  pos.next
-            else:
-                curr = curr.next
-        return head.next
-                
+        def isScramble(self, s1: str, s2: str) -> bool:
+            if len(s1) != len(s2) or sorted(s1) != sorted(s2): return False
+            if len(s1) <=3:
+                return True
+
+            for i in range(1,len(s1)):
+                if (self.isScramble(s1[:i],s2[:i]) and self.isScramble(s1[i:],s2[i:])) or (self.isScramble(s1[:i],s2[-i:]) and self.isScramble(s1[i:],s2[:-i])):
+                    return True 
+            
+            return False
+
 def printList(node):
     while(node):
         print(node.val)
@@ -38,7 +31,5 @@ def createList(nums):
     return first
 
 s = Solution()
-node = createList([1])
-printList(node)
-x = s.partition(head=node,x=3)
-printList(x)
+
+print(s.isScramble("abcdefghijklmnopq","efghijklmnopqcadb"))
