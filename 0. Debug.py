@@ -4,16 +4,12 @@ class ListNode:
         self.next = None
 
 class Solution:
-        def isScramble(self, s1: str, s2: str) -> bool:
-            if len(s1) != len(s2) or sorted(s1) != sorted(s2): return False
-            if len(s1) <=3:
-                return True
+    def grayCode(self, n: int) -> [int]:
+        if n == 0: return [0]
+        nums = self.grayCode(n-1)
+        nums += [num+2**(n-1) for num in nums[::-1]]    
+        return nums
 
-            for i in range(1,len(s1)):
-                if (self.isScramble(s1[:i],s2[:i]) and self.isScramble(s1[i:],s2[i:])) or (self.isScramble(s1[:i],s2[-i:]) and self.isScramble(s1[i:],s2[:-i])):
-                    return True 
-            
-            return False
 
 def printList(node):
     while(node):
@@ -32,4 +28,5 @@ def createList(nums):
 
 s = Solution()
 
-print(s.isScramble("abcdefghijklmnopq","efghijklmnopqcadb"))
+
+print(s.grayCode(3))
