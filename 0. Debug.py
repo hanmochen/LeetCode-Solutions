@@ -35,6 +35,34 @@ class Solution:
             else: dp[i] = 0          
         return dp[-1]
 
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        tmp = ListNode(0)
+        tmp.next = head
+        currPos = tmp
+        idx = 1
+
+        while(idx<m):
+            idx += 1
+            currPos = currPos.next
+
+        left = currPos
+        right = currPos.next
+        currPos = right
+        nextPos = currPos.next
+
+        while(idx<n):
+            temp = nextPos.next
+            nextPos.next = currPos
+            currPos = nextPos
+            nextPos = temp      
+            idx += 1
+        
+        left.next = currPos
+        right.next = nextPos
+
+        return tmp.next
+
+
             
 def printList(node):
     while(node):
@@ -52,6 +80,6 @@ def createList(nums):
     return first
 
 s = Solution()
-
-
-print(s.numDecodings('123245'))
+node = createList([1,2,3,4,5])
+printList(node)
+printList(s.reverseBetween(node,1,5))
