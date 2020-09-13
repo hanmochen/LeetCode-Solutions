@@ -61,6 +61,23 @@ class Solution:
         right.next = nextPos
 
         return tmp.next
+    
+    def restoreIpAddresses(self, s: str) -> [str]:
+        def isValid(s:str)-> bool:
+            if len(s) == 1: return True
+            if len(s) == 2 and s[0] != '0': return True
+            if len(s) == 3 and 99 < int(s) < 256: return True
+            return False
+        def getIP(s:str,n:int) -> [str]:
+            if n == 1: 
+                return [s] if isValid(s) else []
+            possibleIP = []
+            for i in range(1,4):
+                if (n-1) <= len(s)-i <= 3*(n-1) and isValid(s[0:i]):
+                    possibleIP += [s[0:i] + '.' + ip for ip in getIP(s[i:],n-1)]
+            return possibleIP
+        return getIP(s,4)
+
 
 
             
@@ -80,6 +97,4 @@ def createList(nums):
     return first
 
 s = Solution()
-node = createList([1,2,3,4,5])
-printList(node)
-printList(s.reverseBetween(node,1,5))
+print(s.restoreIpAddresses("25525511135"))

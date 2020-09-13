@@ -28,6 +28,7 @@ class Solution:
         nextPos = currPos.next
 
         while(idx<n):
+
             nextPos.next,currPos,nextPos = currPos,nextPos,nextPos.next     
             idx += 1
         
